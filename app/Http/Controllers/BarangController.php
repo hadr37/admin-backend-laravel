@@ -19,10 +19,10 @@ class BarangController extends Controller
         $request->validate([
             'kode_barang' => 'required|unique:barang,kode_barang',
             'nama_barang' => 'required|string',
-            'kategori_id' => 'required|exists:categories,id', // ✅ diperbaiki
+            'kategori_id' => 'required|exists:categories,id',
             'stok' => 'required|integer',
             'harga' => 'required|integer',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
         $data = $request->all();
@@ -48,10 +48,10 @@ class BarangController extends Controller
 
         $request->validate([
             'nama_barang' => 'required|string',
-            'kategori_id' => 'required|exists:categories,id', // ✅ diperbaiki
+            'kategori_id' => 'required|exists:categories,id', 
             'stok' => 'required|integer',
             'harga' => 'required|integer',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
         $data = $request->all();
