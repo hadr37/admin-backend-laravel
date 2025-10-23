@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Artikel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class ArtikelController extends Controller
@@ -16,28 +15,27 @@ class ArtikelController extends Controller
     }
 
     // GET /api/artikel/{slug}
-    public function show(Artikel $artikel)
+    public function show($slug)
     {
+        $artikel = Artikel::where('slug', $slug)->firstOrFail();
         return response()->json($artikel);
     }
 
     // POST /api/artikel
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'slug'  => 'required|string|max:255|unique:artikels,slug',
             'isi'   => 'required|string',
-            'cover' => 'nullable|image|max:10240', // 10MB
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
-        $data = $request->only(['judul', 'slug', 'isi']);
-
         if ($request->hasFile('cover')) {
-            $data['cover'] = $request->file('cover')->store('cover', 'public');
+            $validated['cover'] = $request->file('cover')->store('artikel', 'public');
         }
 
-        $artikel = Artikel::create($data);
+        $artikel = Artikel::create($validated);
 
         return response()->json([
             'message' => 'Artikel berhasil dibuat',
@@ -46,26 +44,26 @@ class ArtikelController extends Controller
     }
 
     // PUT /api/artikel/{slug}
-    public function update(Request $request, Artikel $artikel)
+    public function update(Request $request, $slug)
     {
-        $request->validate([
+        $artikel = Artikel::where('slug', $slug)->firstOrFail();
+
+        $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'slug'  => 'required|string|max:255|unique:artikels,slug,' . $artikel->id,
             'isi'   => 'required|string',
-            'cover' => 'nullable|image|max:10240',
+            'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
-        $data = $request->only(['judul', 'slug', 'isi']);
-
+        // Jika ada cover baru
         if ($request->hasFile('cover')) {
-            // Hapus cover lama jika ada
             if ($artikel->cover && Storage::disk('public')->exists($artikel->cover)) {
                 Storage::disk('public')->delete($artikel->cover);
             }
-            $data['cover'] = $request->file('cover')->store('cover', 'public');
+            $validated['cover'] = $request->file('cover')->store('artikel', 'public');
         }
 
-        $artikel->update($data);
+        $artikel->update($validated);
 
         return response()->json([
             'message' => 'Artikel berhasil diperbarui',
@@ -74,8 +72,10 @@ class ArtikelController extends Controller
     }
 
     // DELETE /api/artikel/{slug}
-    public function destroy(Artikel $artikel)
+    public function destroy($slug)
     {
+        $artikel = Artikel::where('slug', $slug)->firstOrFail();
+
         if ($artikel->cover && Storage::disk('public')->exists($artikel->cover)) {
             Storage::disk('public')->delete($artikel->cover);
         }
