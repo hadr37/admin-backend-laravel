@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenawaranController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArtikelController;
@@ -42,3 +43,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/pesan', [PesanController::class, 'index']);
 Route::post('/pesan', [PesanController::class, 'store']);
 Route::delete('/pesan/{id}', [PesanController::class, 'destroy']);
+
+Route::post('/penawarans', [PenawaranController::class, 'store']);
+Route::get('/penawarans', [PenawaranController::class, 'index']);
+Route::delete('/penawarans/{id}', [PenawaranController::class, 'destroy']);
