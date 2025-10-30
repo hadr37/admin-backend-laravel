@@ -22,15 +22,13 @@ class AuthController extends Controller
             return response()->json(['message' => 'Email atau password salah'], 401);
         }
 
-        // Hanya admin yang bisa login ke dashboard
+
         if ($user->role !== 'admin') {
             return response()->json(['message' => 'Akses ditolak. Hanya admin yang diperbolehkan.'], 403);
         }
 
-        // Hapus token lama (biar tidak konflik)
         $user->tokens()->delete();
 
-        // Buat token baru
         $token = $user->createToken('admin-token')->plainTextToken;
 
         return response()->json([

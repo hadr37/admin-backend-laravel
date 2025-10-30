@@ -8,7 +8,7 @@ return new class extends Migration {
     {
         Schema::create('penawarans', function (Blueprint $table) {
             $table->id();
-            // perhatikan di sini
+
             $table->unsignedBigInteger('barang_id');
             $table->string('nama');
             $table->string('email');
@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->text('pesan')->nullable();
             $table->timestamps();
 
-            // sesuaikan nama tabel foreign key-nya dengan 'barang'
+
             $table->foreign('barang_id')
                 ->references('id')
                 ->on('barang')

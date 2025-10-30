@@ -8,20 +8,18 @@ use Illuminate\Support\Facades\Storage;
 
 class ArtikelController extends Controller
 {
-    // GET /api/artikel
+
     public function index()
     {
         return response()->json(Artikel::latest()->get());
     }
 
-    // GET /api/artikel/{slug}
     public function show($slug)
     {
         $artikel = Artikel::where('slug', $slug)->firstOrFail();
         return response()->json($artikel);
     }
 
-    // POST /api/artikel
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,7 +41,6 @@ class ArtikelController extends Controller
         ], 201);
     }
 
-    // PUT /api/artikel/{slug}
     public function update(Request $request, $slug)
     {
         $artikel = Artikel::where('slug', $slug)->firstOrFail();
@@ -55,7 +52,7 @@ class ArtikelController extends Controller
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
-        // Jika ada cover baru
+
         if ($request->hasFile('cover')) {
             if ($artikel->cover && Storage::disk('public')->exists($artikel->cover)) {
                 Storage::disk('public')->delete($artikel->cover);

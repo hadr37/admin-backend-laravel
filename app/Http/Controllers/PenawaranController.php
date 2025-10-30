@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PenawaranController extends Controller
 {
-    // Simpan penawaran dari user
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -27,7 +27,7 @@ class PenawaranController extends Controller
         ]);
     }
 
-    // Lihat semua penawaran (untuk admin)
+
     public function index()
     {
         $penawaran = Penawaran::with('barang')->latest()->get();
@@ -38,7 +38,6 @@ class PenawaranController extends Controller
         ]);
     }
 
-    // Hapus penawaran
     public function destroy($id)
     {
         $penawaran = Penawaran::find($id);

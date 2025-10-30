@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PesanController extends Controller
 {
-    // Ambil semua pesan (untuk admin)
+
     public function index()
     {
         $pesan = Pesan::latest()->get();
@@ -19,7 +19,7 @@ class PesanController extends Controller
         ]);
     }
 
-    // Simpan pesan baru dari form kontak
+ 
     public function store(Request $request)
     {
         $request->validate([
@@ -43,7 +43,6 @@ class PesanController extends Controller
         ], 201);
     }
 
-    // Hapus pesan
     public function destroy($id)
     {
         $pesan = Pesan::find($id);

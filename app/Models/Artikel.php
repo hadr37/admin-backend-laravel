@@ -16,7 +16,6 @@ class Artikel extends Model
         'cover',
     ];
 
-    // Gunakan slug untuk route binding
     public function getRouteKeyName()
     {
         return 'slug';
